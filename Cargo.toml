@@ -1,0 +1,15 @@
+[package]
+name = "matrix-irc"
+version = "0.1.0"
+authors = ["Gus Caplan <me@gus.host>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "0.2", features = ["full"] }
+irc = { git = "https://github.com/aatxe/irc", branch = "develop" }
+tokio-util = { version = "0.2", features = ["full"] }
+futures = "0.3"
+ruma-client = { version = "0.3", features = ["tls"] }
+ruma-client-api = "0.6"
