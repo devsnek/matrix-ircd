@@ -1,8 +1,11 @@
-use futures::stream::StreamExt;
+use futures::{sink::SinkExt, stream::StreamExt};
 use irc::client::prelude::*;
-use ruma_client::Client;
+use matrix_client::Client;
 use tokio::net::TcpListener;
-use tokio_util::codec::FramedRead;
+use tokio_util::codec::{FramedRead, FramedWrite};
+
+mod error;
+mod matrix_client;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -15,8 +18,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         let (mut socket, _) = listener.accept().await?;
 
         tokio::spawn(async move {
-            let (read, _write) = socket.split();
+            let (read, write) = socket.split();
             let mut read_framed = FramedRead::new(read, irc::proto::IrcCodec::new("utf8").unwrap());
+            let mut write_framed =
+                FramedWrite::new(write, irc::proto::IrcCodec::new("utf8").unwrap());
 
             let mut access_token = None;
 
@@ -24,24 +29,38 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 if let Ok(data) = data {
                     match data.command {
                         Command::PASS(pass) => {
+                            println!("access_token: {}", pass);
                             access_token = Some(pass);
                         }
                         Command::USER(user, _mode, _realname) => {
-                            use ruma_client_api::r0::session::login;
-                            println!("logging in as {}", user);
-                            let client =
-                                Client::https("https://mozilla.org".parse().unwrap(), None);
-                            let response = client
-                                .request(login::Request {
-                                    user: login::UserInfo::MatrixId(user),
-                                    login_info: login::LoginInfo::Token {
-                                        token: access_token.take().unwrap(),
-                                    },
-                                    device_id: None,
-                                    initial_device_display_name: None,
-                                })
-                                .await;
-                            println!("response {:?}", response);
+                            let client = Client::create(
+                                "https://mozilla.modular.im",
+                                &user,
+                                &access_token.take().unwrap(),
+                            )
+                            .await
+                            .unwrap();
+                            println!("access_token: {}", client.access_token());
+                            write_framed
+                                .send(
+                                    Message::new(
+                                        None,
+                                        "Response",
+                                        vec![&format!(
+                                            "Logged in as {} using access token {}",
+                                            user,
+                                            client.access_token()
+                                        )],
+                                    )
+                                    .unwrap(),
+                                )
+                                .await
+                                .unwrap();
+                            // let sync = client.sync().await.unwrap();
+                            // println!("sync {:#?}", sync);
+                        }
+                        Command::JOIN(chanlist, _chankeys, _realname) => {
+                            println!("chanlist {}", chanlist);
                         }
                         _ => {}
                     }

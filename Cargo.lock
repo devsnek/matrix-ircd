@@ -467,11 +467,15 @@ name = "matrix-irc"
 version = "0.1.0"
 dependencies = [
  "futures 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "http 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hyper 0.13.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hyper-tls 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "irc 0.13.6 (git+https://github.com/aatxe/irc?branch=develop)",
- "ruma-client 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "ruma-api 0.13.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "ruma-client-api 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio 0.2.11 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio-util 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "url 2.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -790,26 +794,6 @@ dependencies = [
  "proc-macro2 1.0.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "syn 1.0.15 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "ruma-client"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "futures-core 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "futures-util 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "http 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "hyper 0.13.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "hyper-tls 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "ruma-api 0.13.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "ruma-client-api 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "ruma-events 0.15.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "ruma-identifiers 0.14.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde 1.0.104 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde_json 1.0.48 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde_urlencoded 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "url 2.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1269,7 +1253,6 @@ dependencies = [
 "checksum remove_dir_all 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)" = "4a83fa3702a688b9359eccba92d153ac33fd2e8462f9e0e3fdf155239ea7792e"
 "checksum ruma-api 0.13.1 (registry+https://github.com/rust-lang/crates.io-index)" = "b56cf718a9b575a9ce4fae92399c5c00b9059b2d3fbc6bfb4ff4f00431e50290"
 "checksum ruma-api-macros 0.10.1 (registry+https://github.com/rust-lang/crates.io-index)" = "7e2c60086b570af5d8b88c9e2f10b3c4c950436658a104c3e60117eca2b1c466"
-"checksum ruma-client 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "b9e333757b70f7c8e289191e9db1e5db21d56495507dd9aaeadcdbedded55418"
 "checksum ruma-client-api 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)" = "aa35e24b165401c1066416d804d830313f27d934dcd71f4388396a42f98ba020"
 "checksum ruma-events 0.15.1 (registry+https://github.com/rust-lang/crates.io-index)" = "4a196cbeaa7bffe3756448ee9cf142645790e2a0ece78dfaf10a311eaf5e2a5e"
 "checksum ruma-events-macros 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "962d93056619ed61826a9d8872c863560e4892ff6a69b70f593baa5ae8b19dc8"
