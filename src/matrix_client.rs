@@ -38,37 +38,38 @@ pub struct Client {
 }
 
 impl Client {
-    pub async fn create(
-        homeserver_url: &str,
-        user_id: &str,
-        access_token: &str,
-    ) -> Result<Client, Error> {
-        use ruma_client_api::r0::session::login;
-
-        let mut client = Client {
+    pub fn new(homeserver_url: &str, access_token: &str) -> Client {
+        Client {
             homeserver_url: Url::parse(homeserver_url).unwrap(),
             hyper: HyperClient::builder()
                 .keep_alive(true)
                 .build(HttpsConnector::new()),
-            access_token: String::new(),
+            access_token: access_token.to_string(),
             device_id: String::new(),
-        };
+        }
+    }
+
+    pub async fn get_access_token(
+        homeserver_url: &str,
+        user_id: &str,
+        sso_token: &str,
+    ) -> Result<String, Error> {
+        use ruma_client_api::r0::session::login;
+
+        let client = Client::new(homeserver_url, "");
 
         let response = client
             .request(login::Request {
                 user: login::UserInfo::MatrixId(user_id.to_string()),
                 login_info: login::LoginInfo::Token {
-                    token: access_token.to_string(),
+                    token: sso_token.to_string(),
                 },
                 device_id: None,
                 initial_device_display_name: None,
             })
             .await?;
 
-        client.access_token = response.access_token;
-        client.device_id = response.device_id;
-
-        Ok(client)
+        Ok(response.access_token)
     }
 
     pub fn access_token(&self) -> &str {
